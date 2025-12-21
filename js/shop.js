@@ -77,7 +77,33 @@ const total = 0;
 // Exercise 1
 const buy = (id) => {
     // 1. Loop for to the array products to get the item to add to cart
-    // 2. Add found product to the cart array
+
+    let productFound = null;
+
+    for (let i = 0; i < products.length; i++) {
+        if (products[i].id === id) {
+            productFound = products[i];
+        }
+    }
+
+    if (productFound === null) {
+        return "Product not found."
+    } 
+
+    let prodInCart = false;
+
+    for (let j = 0; j < cart.length; j++) {
+        if (productFound.id === cart[j].id) {
+            cart[j].quantity ++;
+            prodInCart = true;
+        }
+    }
+    
+    if (prodInCart === false) {
+        const newProd = {...productFound};
+        newProd.quantity = 1;
+        cart.push(newProd);
+    }
 }
 
 // Exercise 2
