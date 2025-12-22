@@ -109,6 +109,9 @@ const buy = (id) => {
 // Exercise 2
 const cleanCart = () =>  {
 
+    while (cart.length !== 0) {
+        cart.pop()
+    }
 }
 
 // Exercise 3
