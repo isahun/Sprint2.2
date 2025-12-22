@@ -132,6 +132,8 @@ const calculateTotal = () =>  {
 // Exercise 4
 const applyPromotionsCart = () =>  {
     // Apply promotions to each item in the array "cart"
+    
+    
 }
 
 // Exercise 5
