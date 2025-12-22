@@ -150,7 +150,27 @@ const applyPromotionsCart = () =>  {
 // Exercise 5
 const printCart = () => {
     // Fill the shopping cart modal manipulating the shopping cart dom
+    
+    let cartList = document.getElementById("cart_list");
+    let counterNav = document.getElementById("count_product");
+    
+    cartList.innerHTML = "";
+    let counter = 0;
+    let finalTable = "";
+
+    for (let i = 0; i < cart.length; i++){
+        let subtotal = cart[i].subtotal || (cart[i].price * cart[i].quantity)
+
+        finalTable += `<tr><th scope="row"> ${cart[i].name}</th><td>$${cart[i].price}</td><td>${cart[i].quantity}</td><td>$${subtotal}</td></tr>`
+
+        counter += cart[i].quantity;
+    }
+
+    cartList.innerHTML = finalTable; 
+    counterNav.innerHTML = counter;
 }
+
+
 
 
 // ** Nivell II **
@@ -163,3 +183,8 @@ const removeFromCart = (id) => {
 const open_modal = () =>  {
     printCart();
 }
+
+
+const cleanCartBtn = document.getElementById("clean-cart");
+
+cleanCartBtn.addEventListener("click", cleanCart);
