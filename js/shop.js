@@ -132,8 +132,16 @@ const calculateTotal = () =>  {
 // Exercise 4
 const applyPromotionsCart = () =>  {
     // Apply promotions to each item in the array "cart"
-    
-    
+    let totalDisc = 0;
+
+    for (let i = 0; i < cart.length; i++) {
+        if (cart[i].offer !== undefined) {
+            if (cart[i].quantity >= cart[i].offer.number) {
+                let itemDiscount = (cart[i].price * cart[i].quantity) * (cart[i].offer.percent / 100);
+                
+            }
+        }
+    }
 }
 
 // Exercise 5
