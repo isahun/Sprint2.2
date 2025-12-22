@@ -132,15 +132,18 @@ const calculateTotal = () =>  {
 // Exercise 4
 const applyPromotionsCart = () =>  {
     // Apply promotions to each item in the array "cart"
-    let totalDisc = 0;
 
     for (let i = 0; i < cart.length; i++) {
+        let subtotal = cart[i].price * cart[i].quantity;
+        cart[i].subtotal = subtotal;
+
         if (cart[i].offer !== undefined) {
             if (cart[i].quantity >= cart[i].offer.number) {
-                let itemDiscount = (cart[i].price * cart[i].quantity) * (cart[i].offer.percent / 100);
+                let discSubtotal = subtotal - (subtotal * (cart[i].offer.percent / 100));
                 
+                cart[i].subtotal = discSubtotal;
             }
-        }
+        }         
     }
 }
 
