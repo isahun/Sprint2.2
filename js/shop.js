@@ -131,7 +131,29 @@ const open_modal = () =>  {
     printCart();
 }
 
+//AddToCart EventListener
+const addToCart = document.getElementsByClassName("add-to-cart");
 
+for (let i = 0; i < addToCart.length; i++) {
+    addToCart[i].addEventListener("click", function (event) { 
+        let itemId = parseInt(event.currentTarget.dataset.productId);
+        buy(itemId); 
+    });
+}
+
+//printCart eventListener
+const cartBtn = document.getElementsByClassName("cart-button");
+
+for (let i = 0; i < cartBtn.length; i++) {
+    cartBtn[i].addEventListener("click", printCart);
+}
+
+
+//Clean Cart EventListener
 const cleanCartBtn = document.getElementById("clean-cart");
+cleanCartBtn.addEventListener("click", cleanPrintCart);
 
-cleanCartBtn.addEventListener("click", cleanCart);
+function cleanPrintCart() {
+    cleanCart();
+    printCart();
+}
