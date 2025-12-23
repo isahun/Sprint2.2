@@ -58,7 +58,7 @@ const calculateTotal = () =>  {
     let total = 0;
 
     for (let i = 0; i < cart.length; i++) {
-        const itemPrice = cart[i].price * cart[i].quantity;
+        let itemPrice = cart[i].subtotal;
         total += itemPrice;
     }
 
@@ -76,7 +76,6 @@ const applyPromotionsCart = () =>  {
         if (cart[i].offer !== undefined) {
             if (cart[i].quantity >= cart[i].offer.number) {
                 let discSubtotal = subtotal - (subtotal * (cart[i].offer.percent / 100));
-                
                 cart[i].subtotal = discSubtotal;
             }
         }         
@@ -89,23 +88,25 @@ const printCart = () => {
     
     let cartList = document.getElementById("cart_list");
     let counterNav = document.getElementById("count_product");
-    
-    cartList.innerHTML = "";
+    let totalElement = document.getElementById("total_price");
+
     let counter = 0;
     let finalTable = "";
+    
+    cartList.innerHTML = "";
 
     for (let i = 0; i < cart.length; i++){
-        let subtotal = cart[i].subtotal || (cart[i].price * cart[i].quantity)
+        let subtotal = cart[i].subtotal;
 
-        finalTable += `<tr><th scope="row"> ${cart[i].name}</th><td>$${cart[i].price}</td><td>${cart[i].quantity}</td><td>$${subtotal}</td></tr>`
+        finalTable += `<tr><th scope="row"> ${cart[i].name}</th><td>$${cart[i].price}</td><td>${cart[i].quantity}</td><td>$${subtotal}</td><td><button class="btn btn-sm btn-danger remove-item" data-product-id="${cart[i].id}" aria-label="Remove ${cart[i].name}"> ✕ </button></td></tr>`
 
         counter += cart[i].quantity;
     }
 
     cartList.innerHTML = finalTable; 
     counterNav.innerHTML = counter;
+    totalElement.innerHTML = calculateTotal();
 }
-
 
 
 
@@ -137,17 +138,18 @@ const addToCart = document.getElementsByClassName("add-to-cart");
 for (let i = 0; i < addToCart.length; i++) {
     addToCart[i].addEventListener("click", function (event) { 
         let itemId = parseInt(event.currentTarget.dataset.productId);
-        buy(itemId); 
+        buy(itemId);
+        applyPromotionsCart();
+        printCart(); 
     });
 }
 
-//printCart eventListener
+//Cart button navbar eventListener
 const cartBtn = document.getElementsByClassName("cart-button");
 
 for (let i = 0; i < cartBtn.length; i++) {
     cartBtn[i].addEventListener("click", printCart);
 }
-
 
 //Clean Cart EventListener
 const cleanCartBtn = document.getElementById("clean-cart");
@@ -155,5 +157,8 @@ cleanCartBtn.addEventListener("click", cleanPrintCart);
 
 function cleanPrintCart() {
     cleanCart();
+    applyPromotionsCart();
     printCart();
 }
+
+
