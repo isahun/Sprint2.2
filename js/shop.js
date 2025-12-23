@@ -8,7 +8,8 @@ import { products } from "./products.js";
 // Improved version of cartList. Cart is an array of products (objects), but each one has a quantity field to define its quantity, so these products are not repeated.
 const cart = [];
 
-const total = 0;
+const total = 0; //not used
+
 
 // Exercise 1
 const buy = (id) => {
@@ -42,6 +43,8 @@ const buy = (id) => {
         newProd.quantity = 1;
         cart.push(newProd);
     }
+
+    saveCartToLocalStorage ()
 }
 
 // Exercise 2
@@ -50,6 +53,7 @@ const cleanCart = () =>  {
     while (cart.length !== 0) {
         cart.pop()
     }
+    saveCartToLocalStorage ();
 }
 
 // Exercise 3
@@ -62,7 +66,7 @@ const calculateTotal = () =>  {
         total += itemPrice;
     }
 
-    return total;
+    return total.toFixed(2);
 }
 
 // Exercise 4
@@ -128,11 +132,11 @@ const removeFromCart = (id) => {
         if (cart[i].id === id) {
             if (cart[i].quantity <= 1) {
                 cart.splice(i, 1);
-                return;
             } else {
                 cart[i].quantity--;
-                return;
             }
+            saveCartToLocalStorage ();
+            return;
         }
     }
 }
@@ -140,6 +144,19 @@ const removeFromCart = (id) => {
 const open_modal = () =>  {
     printCart();
 }
+
+//local storage
+const storedCart = localStorage.getItem("cart");
+
+if (storedCart) {
+    const parsedCart = JSON.parse(storedCart);
+    cart.push(...parsedCart);
+    applyPromotionsCart();
+}
+
+function saveCartToLocalStorage () {
+    localStorage.setItem("cart", JSON.stringify(cart));
+};
 
 //AddToCart EventListener
 const addToCart = document.getElementsByClassName("add-to-cart");
@@ -166,7 +183,11 @@ cleanCartBtn.addEventListener("click", cleanPrintCart);
 
 function cleanPrintCart() {
     cleanCart();
-    applyPromotionsCart();
     printCart();
 }
+
+
+
+
+
 
