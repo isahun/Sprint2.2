@@ -86,9 +86,9 @@ const applyPromotionsCart = () =>  {
 const printCart = () => {
     // Fill the shopping cart modal manipulating the shopping cart dom
     
-    let cartList = document.getElementById("cart_list");
-    let counterNav = document.getElementById("count_product");
-    let totalElement = document.getElementById("total_price");
+    const cartList = document.getElementById("cart_list");
+    const counterNav = document.getElementById("count_product");
+    const totalElement = document.getElementById("total_price");
 
     let counter = 0;
     let finalTable = "";
@@ -106,9 +106,18 @@ const printCart = () => {
     cartList.innerHTML = finalTable; 
     counterNav.innerHTML = counter;
     totalElement.innerHTML = calculateTotal();
+
+    const removeBtns = document.getElementsByClassName("remove-item");
+
+    for (let i = 0; i < removeBtns.length ; i++) {
+        removeBtns[i].addEventListener("click", function (event) {
+            let removeId = parseInt(event.currentTarget.dataset.productId);
+            removeFromCart(removeId);
+            applyPromotionsCart();
+            printCart();
+        });
+    }
 }
-
-
 
 // ** Nivell II **
 
@@ -160,5 +169,4 @@ function cleanPrintCart() {
     applyPromotionsCart();
     printCart();
 }
-
 

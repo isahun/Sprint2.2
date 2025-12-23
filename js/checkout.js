@@ -4,7 +4,10 @@ const validate = () => {
 	let error = 0;
 	// Get the input fields
 	const fName = document.getElementById("fName");
+	const lName = document.getElementById("fLastN");
 	const fEmail = document.getElementById("fEmail");
+	const address = document.getElementById("fAddress");
+	const phone = document.getElementById("fPhone");
 
 	// Get the error elements
 	const errorName = document.getElementById("errorName");
