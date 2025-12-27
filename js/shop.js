@@ -1,3 +1,5 @@
+"use strict"
+
 import { products } from "./products.js";
 
 // => Reminder, it's extremely important that you debug your code. 
@@ -9,7 +11,6 @@ import { products } from "./products.js";
 const cart = [];
 
 const total = 0; //not used
-
 
 // Exercise 1
 const buy = (id) => {
@@ -39,12 +40,13 @@ const buy = (id) => {
     }
     
     if (prodInCart === false) {
-        const newProd = {...productFound};
+        const newProd = {...productFound}; //copiem amb spread
         newProd.quantity = 1;
+        newProd.subtotal = newProd.price;
         cart.push(newProd);
     }
 
-    saveCartToLocalStorage ()
+    saveCartToLocalStorage () //guardem despres d modificar cart
 }
 
 // Exercise 2
@@ -62,8 +64,7 @@ const calculateTotal = () =>  {
     let total = 0;
 
     for (let i = 0; i < cart.length; i++) {
-        let itemPrice = cart[i].subtotal;
-        total += itemPrice;
+        total += cart[i].subtotal;
     }
 
     return total.toFixed(2);
@@ -111,6 +112,7 @@ const printCart = () => {
     counterNav.innerHTML = counter;
     totalElement.innerHTML = calculateTotal();
 
+    //event listener per botons de remove item
     const removeBtns = document.getElementsByClassName("remove-item");
 
     for (let i = 0; i < removeBtns.length ; i++) {
@@ -145,20 +147,26 @@ const open_modal = () =>  {
     printCart();
 }
 
-//local storage
+
+//LOCAL STORAGE
+
+//funcio x guardar el cart
+function saveCartToLocalStorage () {
+    localStorage.setItem("cart", JSON.stringify(cart));
+};
+
+//per carregar el cart guardat en iniciar pag
 const storedCart = localStorage.getItem("cart");
 
 if (storedCart) {
     const parsedCart = JSON.parse(storedCart);
     cart.push(...parsedCart);
-    applyPromotionsCart();
+    applyPromotionsCart(); //per recalcular subtotals amb promo després de carregar
 }
 
-function saveCartToLocalStorage () {
-    localStorage.setItem("cart", JSON.stringify(cart));
-};
+// EVENT LISTENERS 
 
-//AddToCart EventListener
+//AddToCart
 const addToCart = document.getElementsByClassName("add-to-cart");
 
 for (let i = 0; i < addToCart.length; i++) {
@@ -170,21 +178,22 @@ for (let i = 0; i < addToCart.length; i++) {
     });
 }
 
-//Cart button navbar eventListener
+//Cart button navbar 
 const cartBtn = document.getElementsByClassName("cart-button");
 
 for (let i = 0; i < cartBtn.length; i++) {
     cartBtn[i].addEventListener("click", printCart);
 }
 
-//Clean Cart EventListener
+//Clean Cart
 const cleanCartBtn = document.getElementById("clean-cart");
-cleanCartBtn.addEventListener("click", cleanPrintCart);
-
-function cleanPrintCart() {
+cleanCartBtn.addEventListener("click", function() {
     cleanCart();
     printCart();
-}
+});
+
+//actualitzar vista en carregar
+if (cart.length > 0) { printCart() };
 
 
 

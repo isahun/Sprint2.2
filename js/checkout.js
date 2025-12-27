@@ -1,3 +1,19 @@
+"use strict"
+
+function updateCounter() {
+	const cart = JSON.parse(localStorage.getItem("cart")) || [];
+	const counterCheckout = document.getElementById("count_product");
+
+	let count = 0;
+
+	for (let i = 0; i < cart.length; i++) {
+		count += cart[i].quantity;
+	}
+
+	counterCheckout.innerHTML = count;
+}
+
+updateCounter();
 
 // Exercise 6
 const validate = () => {
@@ -62,6 +78,8 @@ const validate = () => {
 	}
 }
 
+    ;
+
 //substituting onclick on html button for event listener
 const form = document.querySelector("form");
 
@@ -70,3 +88,45 @@ form.addEventListener("submit", function(event) {
 
 	validate();
 })
+
+//printing cart
+
+function printCheckoutCart() {
+	const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+	const tbodyCheckout = document.getElementById("checkout-list");
+	const totalItems = document.getElementById("checkout-total");
+	const noItemsMsg = document.getElementById("empty-cart-msg");
+
+	tbodyCheckout.innerHTML = "";
+	totalItems.innerHTML = "";
+
+	if (cart.length === 0) {
+		noItemsMsg.style.display = "block";
+		return;
+	}
+
+	noItemsMsg.style.display = "none";
+
+	let total = 0;
+
+	for (let i = 0; i < cart.length; i++) {
+		
+		let subtotal = cart[i].price * cart[i].quantity;
+        cart[i].subtotal = subtotal;
+
+        if (cart[i].offer !== undefined) {
+            if (cart[i].quantity >= cart[i].offer.number) {
+                let discSubtotal = subtotal - (subtotal * (cart[i].offer.percent / 100));
+                cart[i].subtotal = discSubtotal;
+            }
+        }         
+
+		tbodyCheckout.innerHTML += `<tr><th scope="row"> ${cart[i].name}</th><td>$${cart[i].price}</td><td>${cart[i].quantity}</td><td>$${cart[i].subtotal}</td><td></tr>`
+
+		total += cart[i].subtotal;
+	}
+
+	totalItems.innerHTML = `<td class="list-cart-item fw-bold">Total: $${total.toFixed(2)}</td>`;
+}
+
