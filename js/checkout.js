@@ -4,18 +4,23 @@ function updateCounter() {
 	const cart = JSON.parse(localStorage.getItem("cart")) || [];
 	const counterCheckout = document.getElementById("count_product");
 
-	let count = 0;
-
-	for (let i = 0; i < cart.length; i++) {
-		count += cart[i].quantity;
-	}
-
-	counterCheckout.innerHTML = count;
+	counterCheckout.textContent = cart.reduce((total, item) => total + item.quantity, 0);
 }
 
 updateCounter();
 
 // Exercise 6
+
+const validateField = (input, regex = null, minLength = 3) => {
+	if (input.value.trim() == "" || input.value.length < minLength || (regex && !regex.test(input.value))) {
+		input.classList.add("is-invalid")
+		return false;
+	} 
+
+	input.classList.remove("is-invalid");
+	return true;
+}
+
 const validate = () => {
 	let error = 0;
 	// Get the input fields
@@ -42,26 +47,10 @@ const validate = () => {
 
 	
 	// Validate fields entered by the user: name, phone, password, and email
-	if(fName.value.trim() == "" || fName.value.length < 3 || (!validateLetters.test(fName.value))) {
-		fName.classList.add("is-invalid");
-		
-		error++;
-	} else { fName.classList.remove("is-invalid"); }
-
-	if(fLastN.value.trim() == "" || fLastN.value.length < 3 || (!validateLetters.test(fLastN.value))) {
-		fLastN.classList.add("is-invalid");
-		error++;
-	} else { fLastN.classList.remove("is-invalid"); }
-
-	if(fEmail.value.trim() == "" || fEmail.value.length < 3 || !validateEmail.test(fEmail.value)) {
-		fEmail.classList.add("is-invalid")
-		error++;
-	} else { fEmail.classList.remove("is-invalid"); }
-
-	if (fAddress.value.trim() == "" || fAddress.value.length < 3) {
-		fAddress.classList.add("is-invalid");
-		error++;
-	} else { fAddress.classList.remove("is-invalid"); }
+	if(!validateField(fName, validateLetters)) error++;
+	if(!validateField(fLastN, validateLetters)) error++;
+	if(!validateField(fEmail, validateEmail)) error++;
+	if(!validateField(fAddress, null)) error++;
 
 	if(fPhone.value.trim() == "" || isNaN(fPhone.value) || fPhone.value.length !== 9 || (!validateNums.test(fPhone.value))) {
 		fPhone.classList.add("is-invalid");
@@ -76,16 +65,13 @@ const validate = () => {
 	if (error === 0) {
 		alert("Form submitted successfully");
 	}
-}
-
-    ;
+};
 
 //substituting onclick on html button for event listener
 const form = document.querySelector("form");
 
-form.addEventListener("submit", function(event) {
+form.addEventListener("submit", event => {
 	event.preventDefault(); //stop submit
-
 	validate();
 })
 
@@ -98,8 +84,8 @@ function printCheckoutCart() {
 	const totalItems = document.getElementById("checkout-total");
 	const noItemsMsg = document.getElementById("empty-cart-msg");
 
-	tbodyCheckout.innerHTML = "";
-	totalItems.innerHTML = "";
+	tbodyCheckout.textContent = "";
+	totalItems.textContent = "";
 
 	if (cart.length === 0) {
 		noItemsMsg.style.display = "block";
@@ -122,11 +108,11 @@ function printCheckoutCart() {
             }
         }         
 
-		tbodyCheckout.innerHTML += `<tr><th scope="row"> ${cart[i].name}</th><td>$${cart[i].price}</td><td>${cart[i].quantity}</td><td>$${cart[i].subtotal}</td><td></tr>`
+		tbodyCheckout.textContent += `<tr><th scope="row"> ${cart[i].name}</th><td>$${cart[i].price}</td><td>${cart[i].quantity}</td><td>$${cart[i].subtotal}</td><td></tr>`
 
 		total += cart[i].subtotal;
 	}
 
-	totalItems.innerHTML = `<td class="list-cart-item fw-bold">Total: $${total.toFixed(2)}</td>`;
+	totalItems.textContent = `<td class="list-cart-item fw-bold">Total: $${total.toFixed(2)}</td>`;
 }
 
